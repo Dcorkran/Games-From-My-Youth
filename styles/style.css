@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+body {
+  margin: 3rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  width: 1000px;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+}
+
+img {
+  height: 20rem;
+  width: auto;
+}
+
+header {
+  background-color: #BBDEFB;
+}
+
+
+
+.container{
+  display: flex;
+
+}
+
+.tactoe{
+  width: 300px;
+  height: 350px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: auto;
+
+}
+
+.hangman{
+  border-top: 1px solid gray;
+}
+
+.box {
+  width: 100px;  /* Or whatever */
+  height: 100px; /* Or whatever */
+  margin: 0;
+  border: 2px solid black;
+  text-align: center;
+}
+
+.row{
+  width: 500px;
+  height: 100px;
+  justify-content: center;
+
+}
+
+.l{
+  border: 2px solid black;
+}
+.m{
+  border: 2px solid black;
+}
+
+.X{
+  content: 'X';
+}
+
+.O{
+  content: 'O';
+}
+
+.hangman{
+  width: 500px;
+  height: 500px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: auto;
+  flex-direction: column;
+}
+.hangman-letters{
+  justify-content: center;
+}
+.hangman-tries{
+  justify-content: center;
+  align-items: center;
+}
+
+.hangman-box{
+  border-bottom: 5px solid black;
+  margin: 5px
+}
