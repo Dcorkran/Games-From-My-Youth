@@ -72,20 +72,35 @@ $( "input[value='Play!']" ).on('click', function(){
 });
 
 $( "input[value = 'Play Hangman!']").on('click',function(){
-  function getWord(){
-    $.get('http://randomword.setgetgo.com/get.php',function(data){
-      var word = data;
-      console.log(data);
-      return word;
-    });
-    // var word = 'test';
-    // return word;
+  // function getWord(){
+
+
+  function RandomWord() {
+      var requestStr = "http://randomword.setgetgo.com/get.php";
+
+      $.ajax({
+          type: "GET",
+          url: requestStr,
+          dataType: "jsonp",
+          success: function(data){
+            console.log(data);
+            displayWordBox(data);
+          }
+      });
   }
 
-  function displayWordBox(word){
-    for (var i = 0; i < word.length; i++) {
+  function RandomWordComplete(data) {
+      alert(data.Word);
+  }
+
+
+  // }
+
+  function displayWordBox(data){
+    for (var i = 0; i < data.Word.length; i++) {
       var $div = $('<div>').addClass('hangman-box').text('-');
       $('.hangman-letters').append($div);
+      word = data.Word;
     }
   }
 
@@ -109,9 +124,8 @@ $( "input[value = 'Play Hangman!']").on('click',function(){
 
     }
   }
-
-  var word = getWord();
-  displayWordBox(word);
+  var word = '';
+  RandomWord();
   var guess = '';
   var correctGuesses = [];
   var attempts = 5;
