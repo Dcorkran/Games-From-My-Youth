@@ -73,8 +73,13 @@ $( "input[value='Play!']" ).on('click', function(){
 
 $( "input[value = 'Play Hangman!']").on('click',function(){
   function getWord(){
-    var word = 'test';
-    return word;
+    $.get('http://randomword.setgetgo.com/get.php',function(data){
+      var word = data;
+      console.log(data);
+      return word;
+    });
+    // var word = 'test';
+    // return word;
   }
 
   function displayWordBox(word){
@@ -86,35 +91,52 @@ $( "input[value = 'Play Hangman!']").on('click',function(){
 
 
 
-function doesGuessMatch(character,word){
-  for (var i = 0; i < word.length; i++) {
-    if (character === word[i]) {
-      return i+1;
+  function doesGuessMatch(character,word){
+    var newArr = [];
+    for (var i = 0; i < word.length; i++) {
+      if (character === word[i]) {
+        newArr.push(i+1);
+      }
+    }
+    return newArr;
+  }
+
+  function fillInLetter(letterArray,letter){
+    if (letterArray.length !== 0) {
+      for (var i = 0; i < letterArray.length; i++) {
+        $('.hangman-letters div:nth-of-type('+letterArray[i]+')').text(letter);
+      }
+
     }
   }
-  return 0;
-}
-
-function fillInLetter(number,letter){
-  if (number !== 0) {
-    $('.hangman-letters div:nth-of-type('+number+')').text(letter);
-  }
-}
-
 
   var word = getWord();
   displayWordBox(word);
   var guess = '';
+  var correctGuesses = [];
+  var attempts = 5;
+  $('#guesses-left').text(attempts);
+
 
   $('#hangman-button').on('click', function(event){
     event.preventDefault();
     guess = $('#hangman-val').val();
+    $('#hangman-val').val('');
     var fillInNumber = doesGuessMatch(guess,word);
-    fillInLetter(fillInNumber,guess);
+
+    if (fillInNumber.length === 0) {
+      attempts -= 1;
+      $('#guesses-left').text(attempts);
+      alert('That is not correct. Try again!');
+    } else {
+      correctGuesses = correctGuesses.concat.apply(correctGuesses, fillInNumber);
+      fillInLetter(fillInNumber,guess);
+    }
+    if ($('#guesses-left').text() === '0') {
+      alert('You lose :(');
+    } else if (correctGuesses.length === word.length) {
+      alert('You win!');
+    }
+
   });
-
-
-
-
-
 });
