@@ -89,5 +89,17 @@ header {
 
 .hangman-box{
   border-bottom: 5px solid black;
-  margin: 5px
+  margin: 5px;
+}
+
+.pokemon-main{
+  border-top: 2px solid gray;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#pokemon-image{
+  max-width: 300px;
+  max-height: 200px;
 }

@@ -89,9 +89,6 @@ $( "input[value = 'Play Hangman!']").on('click',function(){
       });
   }
 
-  function RandomWordComplete(data) {
-      alert(data.Word);
-  }
 
 
   // }
@@ -153,4 +150,36 @@ $( "input[value = 'Play Hangman!']").on('click',function(){
     }
 
   });
+});
+
+
+$('#pokemon-button').on('click',function(){
+
+  $('.pokemon-main').append($('<form>').attr('id','pokemon-form'));
+  $('#pokemon-form').append($('<input>').attr({type:'text',placeholder:'What is your guess?',id:'pokemon-value'}));
+  $('#pokemon-form').append($('<input>').attr({type:'submit',id:'pokemon-submit'}));
+
+  var pokenum = Math.floor(Math.random() * 151) + 1;
+  var guess = '';
+  var pokename = '';
+
+  $.get('http://pokeapi.co/api/v2/pokemon/'+pokenum+'/',function(data){
+    console.log(data);
+    $('#pokemon-image').attr('src',data.sprites.front_default);
+    pokename = data.name;
+  });
+
+  $('#pokemon-submit').on('click',function(event){
+    event.preventDefault();
+    guess = $('#pokemon-value').val().toLowerCase();
+    $('#pokemon-value').val('');
+    if (guess === pokename) {
+      alert('You are correct!');
+    } else {
+      alert('try again');
+    }
+  });
+
+
+
 });
