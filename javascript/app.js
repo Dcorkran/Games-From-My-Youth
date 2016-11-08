@@ -155,6 +155,20 @@ $( "input[value = 'Play Hangman!']").on('click',function(){
 
 $('#pokemon-button').on('click',function(){
 
+
+  function playAudio(){
+
+    var songChoices = ['6xG2ZGudUgtV235xvDlSEt','16m4pel49Xid6zIf5Ov2v0'];
+    var randomChoice = Math.random();
+    randomChoice = Math.round(randomChoice);
+
+    $.get('https://api.spotify.com/v1/tracks/'+songChoices[randomChoice],function(data){
+      $('#audio').attr('src',data.preview_url);
+      $('#audio').trigger('play');;
+    });
+  }
+  playAudio();
+
   $('.pokemon-main').append($('<form>').attr('id','pokemon-form'));
   $('#pokemon-form').append($('<input>').attr({type:'text',placeholder:'What is your guess?',id:'pokemon-value'}));
   $('#pokemon-form').append($('<input>').attr({type:'submit',id:'pokemon-submit'}));
