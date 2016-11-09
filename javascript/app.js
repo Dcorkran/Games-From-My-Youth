@@ -1,4 +1,4 @@
-$( "input[value='Play!']" ).on('click', function(){
+$( "input[value='Play tic-tac-toe!']" ).on('click', function(){
 
   function isSquareFilled(box) {
     if (box.hasClass('X')) {
@@ -13,11 +13,11 @@ $( "input[value='Play!']" ).on('click', function(){
   function markBoard(player,box) {
     if (player === 1) {
       box.addClass('X');
-      box.text('X');
+      box.append($('<p>').addClass('tactoe-font').text('X'));
       return '.X';
     } else {
       box.addClass('O');
-      box.text('O');
+      box.append($('<p>').addClass('tactoe-font').text('O'));
       return '.O';
     }
   }
@@ -96,6 +96,7 @@ $( "input[value = 'Play Hangman!']").on('click',function(){
   function displayWordBox(data){
     for (var i = 0; i < data.Word.length; i++) {
       var $div = $('<div>').addClass('hangman-box').text('-');
+      $div.addClass('col');
       $('.hangman-letters').append($div);
       word = data.Word;
     }
@@ -164,7 +165,8 @@ $('#pokemon-button').on('click',function(){
 
     $.get('https://api.spotify.com/v1/tracks/'+songChoices[randomChoice],function(data){
       $('#audio').attr('src',data.preview_url);
-      $('#audio').trigger('play');;
+      $('#audio').prop('volume', 0.2);
+      $('#audio').trigger('play');
     });
   }
   playAudio();
@@ -193,7 +195,81 @@ $('#pokemon-button').on('click',function(){
       alert('try again');
     }
   });
+});
 
+$("#connect-button").on('click',function(){
+  var player = 2;
 
+  function switchPlayer(player){
+    if (player === 2) {
+      player = 1;
+    } else {
+      player = 2;
+    }
+    return player;
+  }
+
+  function getColumnNumber(column){
+    for (var i = 0; i < 7; i++) {
+      console.log(column);
+      console.log($('.connect-row')[i]);
+      if ($('.connect-row')[i] === column[0]) {
+        return i;
+      }
+    }
+  }
+
+  function addPiece(player,boxes){
+    for (var i = 5; i >= 0; i--) {
+      if ($(boxes[i]).css('background-color') == 'rgb(255, 255, 255)') {
+        if (player === 1) {
+          $(boxes[i]).addClass('black-piece');
+        } else {
+          $(boxes[i]).addClass('red-piece');
+        }
+        return $(boxes[i]);
+      }
+    }
+    return false;
+  }
+
+  // function checkY(classCheck,columnNum,rowNum){
+  //   var piecesInARow = 1;
+  //   for (var i = 1; i < 4; i++) {
+  //     if ($('.connect-row')[columnNum + i].hasClass(classCheck)) {
+  //       piecesInARow++;
+  //     } else {
+  //       break;
+  //     }
+  //   }
+  //   for (var i = 1; i < 4; i++) {
+  //     if ($('.connect-row')[columnNum - i].hasClass(classCheck)) {
+  //       piecesInARow++;
+  //     } else {
+  //       break;
+  //     }
+  //   }
+  // }
+
+  function checkWin(player,columnNum,rowNum){
+    var classCheck = '';
+    if (player === 1) {
+      classCheck = 'black-piece';
+    } else {
+      classCheck = 'red-piece';
+    }
+
+  }
+
+  $('.connect-row').on('click',function(){
+    player = switchPlayer(player);
+    var column = $(this);
+    var boxes = $(this).children();
+    var columnNum = getColumnNumber(column);
+    var pieceAdded = addPiece(player,boxes);
+    if (pieceAdded != false) {
+
+    }
+  });
 
 });
