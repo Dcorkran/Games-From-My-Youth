@@ -198,7 +198,7 @@ $('#pokemon-button').on('click',function(){
 });
 
 $("#connect-button").on('click',function(){
-  var player = 2;
+  var player = 1;
 
   function switchPlayer(player){
     if (player === 2) {
@@ -211,9 +211,7 @@ $("#connect-button").on('click',function(){
 
   function getColumnNumber(column){
     for (var i = 0; i < 7; i++) {
-      console.log(column);
-      console.log($('.connect-row')[i]);
-      if ($('.connect-row')[i] === column[0]) {
+      if ($('.connect-column')[i] === column[0]) {
         return i;
       }
     }
@@ -227,48 +225,138 @@ $("#connect-button").on('click',function(){
         } else {
           $(boxes[i]).addClass('red-piece');
         }
-        return $(boxes[i]);
+        return i;
       }
     }
     return false;
   }
 
-  // function checkY(classCheck,columnNum,rowNum){
-  //   var piecesInARow = 1;
-  //   for (var i = 1; i < 4; i++) {
-  //     if ($('.connect-row')[columnNum + i].hasClass(classCheck)) {
-  //       piecesInARow++;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  //   for (var i = 1; i < 4; i++) {
-  //     if ($('.connect-row')[columnNum - i].hasClass(classCheck)) {
-  //       piecesInARow++;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  // }
+  function checkY(classCheck,xPos,yPos){
+    var piecesInARow = 1;
+    for (var i = 1; i < 4; i++) {
+      if ($('.connect-column:eq('+xPos+') .connect-box:eq('+(yPos + i)+')').hasClass(classCheck)) {
+        piecesInARow++;
+      } else {
+        break;
+      }
+    }
+    for (var i = 1; i < 4; i++) {
+      if ($('.connect-column:eq('+xPos+') .connect-box:eq('+(yPos - i)+')').hasClass(classCheck)) {
+        piecesInARow++;
+      } else {
+        break;
+      }
+    }
+    if (piecesInARow >= 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-  function checkWin(player,columnNum,rowNum){
+  function checkX(classCheck,xPos,yPos){
+    var piecesInARow = 1;
+    for (var i = 1; i < 4; i++) {
+      if ($('.connect-column:eq('+(xPos + i)+') .connect-box:eq('+yPos+')').hasClass(classCheck)) {
+        piecesInARow++;
+      } else {
+        break;
+      }
+    }
+    for (var i = 1; i < 4; i++) {
+      if ($('.connect-column:eq('+(xPos - i)+') .connect-box:eq('+yPos+')').hasClass(classCheck)) {
+        piecesInARow++;
+      } else {
+        break;
+      }
+    }
+    if (piecesInARow >= 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function checkDiagonalTop(classCheck,xPos,yPos){
+    var piecesInARow = 1;
+    for (var i = 1; i < 4; i++) {
+      if ($('.connect-column:eq('+(xPos + i)+') .connect-box:eq('+(yPos + i)+')').hasClass(classCheck)) {
+        piecesInARow++;
+      } else {
+        break;
+      }
+    }
+    for (var i = 1; i < 4; i++) {
+      if ($('.connect-column:eq('+(xPos - i)+') .connect-box:eq('+(yPos - i)+')').hasClass(classCheck)) {
+        piecesInARow++;
+      } else {
+        break;
+      }
+    }
+    if (piecesInARow >= 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function checkDiagonalBot(classCheck,xPos,yPos){
+    var piecesInARow = 1;
+    for (var i = 1; i < 4; i++) {
+      if ($('.connect-column:eq('+(xPos - i)+') .connect-box:eq('+(yPos + i)+')').hasClass(classCheck)) {
+        piecesInARow++;
+      } else {
+        break;
+      }
+    }
+    for (var i = 1; i < 4; i++) {
+      if ($('.connect-column:eq('+(xPos + i)+') .connect-box:eq('+(yPos - i)+')').hasClass(classCheck)) {
+        piecesInARow++;
+      } else {
+        break;
+      }
+    }
+    if (piecesInARow >= 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function checkWin(player,xPos,yPos){
     var classCheck = '';
     if (player === 1) {
       classCheck = 'black-piece';
     } else {
       classCheck = 'red-piece';
     }
-
+    if (checkY(classCheck,xPos,yPos)) {
+      return true;
+    }
+    else if (checkX(classCheck,xPos,yPos)) {
+      return true;
+    }
+    else if (checkDiagonalTop(classCheck,xPos,yPos)) {
+      return true;
+    }
+    else if (checkDiagonalBot(classCheck,xPos,yPos)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  $('.connect-row').on('click',function(){
-    player = switchPlayer(player);
+  $('.connect-column').on('click',function(){
     var column = $(this);
     var boxes = $(this).children();
-    var columnNum = getColumnNumber(column);
-    var pieceAdded = addPiece(player,boxes);
-    if (pieceAdded != false) {
-
+    var xPos = getColumnNumber(column);
+    var yPos = addPiece(player,boxes);
+    if (yPos != false) {
+      if (checkWin(player,xPos,yPos)) {
+        alert('you win!');
+      } else {
+        player = switchPlayer(player);
+      }
     }
   });
 
